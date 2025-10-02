@@ -145,6 +145,10 @@ The frontend build output will be in `frontend/build/` directory.
 
 ### Quick Start with Docker Compose
 
+For the fastest setup, see [QUICKSTART.md](./QUICKSTART.md).
+
+### Development Deployment
+
 1. Ensure Docker and Docker Compose are installed
 2. Run the deployment script:
    ```bash
@@ -155,6 +159,26 @@ This will:
 - Build Docker images for backend and frontend
 - Start MongoDB, backend, and frontend containers
 - Set up networking between containers
+
+### Production Deployment
+
+For production with authentication and health checks:
+
+1. Copy the environment template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and set secure passwords:
+   ```bash
+   MONGO_ROOT_USERNAME=your_admin_username
+   MONGO_ROOT_PASSWORD=your_secure_password
+   ```
+
+3. Deploy using production compose file:
+   ```bash
+   docker compose -f docker-compose.prod.yml up -d
+   ```
 
 ### Manual Docker Deployment
 
@@ -317,16 +341,45 @@ To add deployment to cloud platforms:
 
 ## Environment Variables
 
+A template file `.env.example` is provided. Copy it to create your environment configuration:
+
+```bash
+cp .env.example .env
+```
+
 ### Backend (.env)
+
+Create `backend/.env`:
 
 ```bash
 MONGO_URL=mongodb://localhost:27017/digital_agency
 ```
 
+For production with authentication:
+```bash
+MONGO_URL=mongodb://username:password@mongodb:27017/digital_agency?authSource=admin
+```
+
 ### Frontend (.env)
+
+Create `frontend/.env`:
 
 ```bash
 REACT_APP_BACKEND_URL=http://localhost:8000
+```
+
+For production:
+```bash
+REACT_APP_BACKEND_URL=https://api.yourdomain.com
+```
+
+### Docker Compose Environment Variables
+
+For `docker-compose.prod.yml`, set these in the root `.env` file:
+
+```bash
+MONGO_ROOT_USERNAME=admin
+MONGO_ROOT_PASSWORD=your_secure_password
 ```
 
 ### Production Considerations
@@ -335,6 +388,7 @@ REACT_APP_BACKEND_URL=http://localhost:8000
 - Enable HTTPS for production
 - Set appropriate CORS origins in backend
 - Use environment-specific URLs
+- Never commit `.env` files (already in `.gitignore`)
 
 ## Troubleshooting
 
@@ -443,12 +497,78 @@ curl http://localhost:3000
    - Use encrypted connections
    - Regular security updates
 
+## Monitoring and Logging
+
+### View Application Logs
+
+**Docker Compose:**
+```bash
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f backend
+docker compose logs -f frontend
+docker compose logs -f mongodb
+
+# Last 100 lines
+docker compose logs --tail=100 backend
+```
+
+**Manual deployment:**
+```bash
+# Backend (check uvicorn process)
+journalctl -u uvicorn -f  # if using systemd
+
+# Frontend (nginx logs)
+tail -f /var/log/nginx/access.log
+tail -f /var/log/nginx/error.log
+```
+
+### Health Checks
+
+The application includes health check endpoints:
+
+**Backend Health Check:**
+```bash
+curl http://localhost:8000/api/health
+```
+
+Expected response:
+```json
+{
+  "status": "healthy",
+  "message": "Digital Agency API is running"
+}
+```
+
+**Frontend Check:**
+```bash
+curl http://localhost:3000
+```
+
+Should return the HTML of the React app.
+
+### Container Status
+
+```bash
+# View running containers
+docker compose ps
+
+# View resource usage
+docker stats
+
+# Inspect specific container
+docker inspect digital-agency-backend
+```
+
 ## Support
 
 For issues or questions:
 1. Check this documentation
-2. Review logs: `docker-compose logs` or application logs
-3. Open an issue on GitHub
+2. Review logs: `docker compose logs` or application logs
+3. Check health endpoints
+4. Open an issue on GitHub
 
 ## Additional Resources
 

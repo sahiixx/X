@@ -15,10 +15,26 @@ A modern digital agency platform with FastAPI backend and React frontend, featur
 ### Using Docker (Recommended)
 
 ```bash
+# Option 1: Using deploy script
 ./deploy.sh
+
+# Option 2: Using Makefile
+make deploy
 ```
 
 This will start all services (MongoDB, Backend, Frontend) using Docker Compose.
+
+### Using Makefile Commands
+
+```bash
+make help       # Show all available commands
+make build      # Build the application
+make deploy     # Deploy with Docker
+make dev        # Start development servers
+make stop       # Stop all containers
+make logs       # View logs
+make health     # Check health status
+```
 
 ### Manual Setup
 
