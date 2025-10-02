@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/venv/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Build outputs
+frontend/build/
+frontend/dist/
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+*.coverage
+
+# Docker (keep .dockerignore files)
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Lock files (keep package-lock.json for reproducibility)
+# yarn.lock
+
+# OS
+Thumbs.db
