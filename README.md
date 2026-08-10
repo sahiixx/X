@@ -1,130 +1,102 @@
-# Digital Agency Platform
+# X
+
+
 
 A modern digital agency platform with FastAPI backend and React frontend, featuring portfolio management, service listings, and more.
 
-## Features
+## Table of Contents
 
-- **Backend**: FastAPI-based REST API with MongoDB integration
-- **Frontend**: React application with Tailwind CSS styling
-- **Documentation**: Mintlify-powered documentation
-- **Containerization**: Docker and Docker Compose support
-- **CI/CD**: GitHub Actions workflow for automated testing and deployment
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Model Routing](#model-routing)
+- [Project Layout](#project-layout)
+- [Development](#development)
+- [Related Repositories](#related-repositories)
+
+## Overview
+
+A modern digital agency platform with FastAPI backend and React frontend, featuring portfolio management, service listings, and more.
+
+| | |
+|---|---|
+| **Stack** | — |
+| **Frameworks** | — |
+| **Tests** | none detected |
+| **Commits** | 2 |
+| **Last activity** | 2026-08-10 |
+| **Visibility** | public |
 
 ## Quick Start
 
-### Using Docker (Recommended)
+### Install
 
 ```bash
-# Option 1: Using deploy script
-./deploy.sh
-
-# Option 2: Using Makefile
-make deploy
+# No dependency manifest detected — see source layout below.
 ```
 
-This will start all services (MongoDB, Backend, Frontend) using Docker Compose.
-
-### Using Makefile Commands
+### Run
 
 ```bash
-make help       # Show all available commands
-make build      # Build the application
-make deploy     # Deploy with Docker
-make dev        # Start development servers
-make stop       # Stop all containers
-make logs       # View logs
-make health     # Check health status
+# Entry point not auto-detected; inspect the layout below.
 ```
 
-### Manual Setup
+## Model Routing
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions on:
-- Local development setup
-- Building the application
-- Manual deployment
-- Environment configuration
-- Troubleshooting
+Agent work in this repo routes through Azure AI Foundry. See [`AGENTS.md`](./AGENTS.md)
+for the full contract.
 
-## Project Structure
+| Purpose | Deployment | Endpoint |
+|---|---|---|
+| Default / general | `gpt-5.6-sol` | `/openai/v1/chat/completions` |
+| Deep reasoning | `claude-opus-5` | `/openai/v1/responses` **only** |
+| Embeddings | `text-embedding-3-small` | `/openai/v1/embeddings` |
 
-```
-.
-├── backend/          # FastAPI backend application
-├── frontend/         # React frontend application
-├── docs/            # Documentation (Mintlify)
-├── .github/         # GitHub Actions workflows
-├── docker-compose.yml
-├── build.sh         # Build script
-├── deploy.sh        # Deployment script
-└── DEPLOYMENT.md    # Detailed deployment guide
+```bash
+export AZURE_FOUNDRY_API_KEY=...        # never commit this
+export AZURE_FOUNDRY_BASE_URL=https://<resource>.openai.azure.com/openai/v1
 ```
 
-## Documentation
+> **Gotcha:** Claude deployments on Azure return `404 api_not_supported` on
+> `/chat/completions`. They answer **only** via the Responses API.
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
+## Project Layout
 
 ```
-mint dev
+AGENTS.md
+BUILD_AND_DEPLOY_SUMMARY.md
+CONTRIBUTING.md
+DEPLOYMENT.md
+LICENSE
+Makefile
+QUICKSTART.md
+README.md
+ai-tools/
+api-reference/
+backend/
+build.sh
+deploy.sh
+development.mdx
 ```
-
-View your local preview at `http://localhost:3000`.
 
 ## Development
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+```bash
+# lint / format before committing
+# no linter configured
 
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
-mint dev
+# run the CI check locally
+gh workflow run hermes-azure-check.yml
 ```
 
-View your local preview at `http://localhost:3000`.
+Secrets live in environment variables and CI secrets — never in tracked files.
 
-## Access Points
+## Related Repositories
 
-After deployment:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
+Part of a 84-repository workspace sharing one agentic contract:
 
-## Development
+- **[agentic-harness](https://github.com/sahiixx/agentic-harness)** — patterns, contracts, and reference implementations
+- `AGENTS.md` in every repo pins identical model routing
 
-- **Frontend**: `cd frontend && npm start`
-- **Backend**: `cd backend && uvicorn server:app --reload`
+---
 
-## Publishing Documentation Changes
-
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## CI/CD Pipeline
-
-The project includes automated CI/CD using GitHub Actions:
-- Runs tests on every push and pull request
-- Builds Docker images on main branch
-- See `.github/workflows/ci-cd.yml` for details
-
-## Need Help?
-
-### Deployment Issues
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive troubleshooting
-
-### Documentation Issues
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Deployment Guide](./DEPLOYMENT.md)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [React Documentation](https://react.dev/)
-- [Mintlify Documentation](https://mintlify.com/docs)
+<sub>README maintained by the agentic harness · last regenerated 2026-08-10</sub>
